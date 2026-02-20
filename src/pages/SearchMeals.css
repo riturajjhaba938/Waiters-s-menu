@@ -1,6 +1,5 @@
 .search-page {
-    display: flex;
-    flex-direction: column;
+    display: block;
 }
 
 .search-header {

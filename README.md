@@ -3,6 +3,8 @@
 Welcome to **Waiter's Menu** – Serving to Chefs!
 A dynamic, highly responsive single-page Recipe application built using React and Vite, powered by [TheMealDB API](https://www.themealdb.com/).
 
+![App Workflow Demonstration](./app_workflow_demo.webp)
+
 This application is designed with pure Vanilla CSS, prioritizing elegant designs, smooth transitions, and state-of-the-art UI paradigms over standard frontend styling frameworks.
 
 ## ✨ Features

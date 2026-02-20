@@ -48,8 +48,8 @@ const SearchMeals = () => {
     return (
         <div className="search-page fade-in">
             <div className="search-header">
-                <h1>Discover Delicious Meals</h1>
-                <p>Explore recipes from around the world and save your favorites.</p>
+                <h1>Waiter's Menu</h1>
+                <p>Serving to Chefs</p>
 
                 <form onSubmit={handleSearch} className="search-bar">
                     <div className="search-input-wrapper">

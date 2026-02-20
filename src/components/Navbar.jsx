@@ -12,7 +12,7 @@ const Navbar = () => {
             <div className="container nav-container">
                 <NavLink to="/" className="nav-logo">
                     <Utensils className="logo-icon" />
-                    <span>MealExplorer</span>
+                    <span>Waiter's Menu</span>
                 </NavLink>
 
                 <ul className="nav-links">

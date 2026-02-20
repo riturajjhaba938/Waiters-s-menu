@@ -10,6 +10,9 @@ const LikedMeals = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Reference string to ensure we only refetch if the actual liked IDs change, not on note/rating updates
+    const likedIdsString = likedMeals.join(',');
+
     useEffect(() => {
         const fetchLikedDetails = async () => {
             if (likedMeals.length === 0) {
@@ -41,7 +44,7 @@ const LikedMeals = () => {
         };
 
         fetchLikedDetails();
-    }, [likedMeals]);
+    }, [likedIdsString]); // Important: Depend on the joined string, not the array reference or context object
 
     return (
         <div className="liked-page fade-in">

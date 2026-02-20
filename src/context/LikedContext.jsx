@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useMemo } from 'react';
 
 export const LikedContext = createContext();
 
@@ -51,18 +51,23 @@ export const LikedProvider = ({ children }) => {
         ));
     };
 
-    // For ShoppingList and legacy ID arrays
-    const getLikedIds = () => likedMeals.map(meal => meal.id);
+    // Memoize the value to prevent unnecessary re-renders of consumers
+    const contextValue = useMemo(() => {
+        // We compute likedIds here so it updates when likedMeals changes
+        const likedIds = likedMeals.map(meal => meal.id);
 
-    return (
-        <LikedContext.Provider value={{
-            likedMeals: getLikedIds(),
+        return {
+            likedMeals: likedIds,
             likedMealsData: likedMeals,
             toggleLike,
             isLiked,
             updateRating,
             updateNotes
-        }}>
+        };
+    }, [likedMeals]); // Recompute only when likedMeals state changes
+
+    return (
+        <LikedContext.Provider value={contextValue}>
             {children}
         </LikedContext.Provider>
     );

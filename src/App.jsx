@@ -11,11 +11,11 @@ import CategoryMeals from './pages/CategoryMeals';
 
 function App() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <LikedProvider>
         <BrowserRouter>
           <Navbar />
-          <main className="page-wrapper container" style={{ flex: 1 }}>
+          <main className="page-wrapper container flex-1 w-full" style={{ flexGrow: 1, width: '100%' }}>
             <Routes>
               <Route path="/" element={<SearchMeals />} />
               <Route path="/meal/:id" element={<MealDetails />} />

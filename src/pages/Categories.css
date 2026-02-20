@@ -1,0 +1,48 @@
+.categories-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.category-img-container {
+    background-color: #fff;
+    /* categories thumb have white background usually in TheMealDB */
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.category-img {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+.category-card:hover .category-img {
+    transform: scale(1.1) rotate(2deg);
+}
+
+.category-content {
+    padding: 1.5rem;
+}
+
+.category-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.category-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}

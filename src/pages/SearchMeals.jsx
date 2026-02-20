@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { LikedContext } from '../context/LikedContext';
-import { Search, Heart, Info, X } from 'lucide-react';
+import { Search, Heart, Info, X, Filter, ArrowDownAZ, ArrowUpZA } from 'lucide-react';
 import './SearchMeals.css';
 
 const SearchMeals = () => {
@@ -10,6 +10,10 @@ const SearchMeals = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { toggleLike, isLiked } = useContext(LikedContext);
+
+    // Advanced Filtering and Sorting States
+    const [filterArea, setFilterArea] = useState('All');
+    const [sortOrder, setSortOrder] = useState('default'); // 'default', 'az', 'za'
 
     const fetchMeals = async (query = '') => {
         setLoading(true);
@@ -24,6 +28,9 @@ const SearchMeals = () => {
 
             const data = await response.json();
             setMeals(data.meals || []);
+            // Reset filters on new search
+            setFilterArea('All');
+            setSortOrder('default');
         } catch (err) {
             setError(err.message);
         } finally {
@@ -44,6 +51,34 @@ const SearchMeals = () => {
         setSearchTerm('');
         fetchMeals();
     };
+
+    // Extract unique areas for the filter dropdown
+    const availableAreas = useMemo(() => {
+        if (!meals || meals.length === 0) return [];
+        const areas = meals.map(meal => meal.strArea).filter(Boolean);
+        return [...new Set(areas)].sort();
+    }, [meals]);
+
+    // Apply filtering and sorting
+    const processedMeals = useMemo(() => {
+        if (!meals || meals.length === 0) return [];
+
+        let result = [...meals];
+
+        // Apply Area Filter
+        if (filterArea !== 'All') {
+            result = result.filter(meal => meal.strArea === filterArea);
+        }
+
+        // Apply Alphabetical Sorting
+        if (sortOrder === 'az') {
+            result.sort((a, b) => a.strMeal.localeCompare(b.strMeal));
+        } else if (sortOrder === 'za') {
+            result.sort((a, b) => b.strMeal.localeCompare(a.strMeal));
+        }
+
+        return result;
+    }, [meals, filterArea, sortOrder]);
 
     return (
         <div className="search-page fade-in">
@@ -70,6 +105,38 @@ const SearchMeals = () => {
                         Find Meals
                     </button>
                 </form>
+
+                {/* Advanced Filters */}
+                {!loading && !error && meals.length > 0 && (
+                    <div className="filters-container">
+                        <div className="filter-group">
+                            <label><Filter size={16} /> Area:</label>
+                            <select
+                                value={filterArea}
+                                onChange={(e) => setFilterArea(e.target.value)}
+                                className="filter-select"
+                            >
+                                <option value="All">All Regions</option>
+                                {availableAreas.map(area => (
+                                    <option key={area} value={area}>{area}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="filter-group">
+                            <label>Sort By:</label>
+                            <select
+                                value={sortOrder}
+                                onChange={(e) => setSortOrder(e.target.value)}
+                                className="filter-select"
+                            >
+                                <option value="default">Relevance</option>
+                                <option value="az">A to Z</option>
+                                <option value="za">Z to A</option>
+                            </select>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {loading && (
@@ -99,9 +166,19 @@ const SearchMeals = () => {
                 </div>
             )}
 
-            {!loading && !error && meals.length > 0 && (
+            {!loading && !error && meals.length > 0 && processedMeals.length === 0 && (
+                <div className="empty-state">
+                    <h3>No meals match these filters</h3>
+                    <p>Try changing your Area selection.</p>
+                    <button onClick={() => setFilterArea('All')} className="btn btn-primary mt-2">
+                        Reset Filters
+                    </button>
+                </div>
+            )}
+
+            {!loading && !error && processedMeals.length > 0 && (
                 <div className="grid">
-                    {meals.map((meal) => (
+                    {processedMeals.map((meal) => (
                         <div key={meal.idMeal} className="card">
                             <img
                                 src={meal.strMealThumb}
@@ -110,7 +187,7 @@ const SearchMeals = () => {
                                 loading="lazy"
                             />
                             <div className="card-content">
-                                <span className="card-category">{meal.strCategory}</span>
+                                <span className="card-category">{meal.strArea} • {meal.strCategory}</span>
                                 <h3 className="card-title" title={meal.strMeal}>{meal.strMeal}</h3>
 
                                 <div className="card-actions">

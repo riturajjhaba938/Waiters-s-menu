@@ -157,6 +157,51 @@
     margin-top: 0.2rem;
 }
 
+.ingredient-link {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+    display: flex;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.ingredient-link:hover {
+    color: var(--primary-color);
+    background-color: rgba(255, 107, 107, 0.1);
+    transform: translateX(4px);
+}
+
+.video-section {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+.video-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
 @media (max-width: 900px) {
     .details-header {
         grid-template-columns: 1fr;

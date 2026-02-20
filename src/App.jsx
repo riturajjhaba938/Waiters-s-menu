@@ -8,6 +8,8 @@ import MealDetails from './pages/MealDetails';
 import LikedMeals from './pages/LikedMeals';
 import Categories from './pages/Categories';
 import CategoryMeals from './pages/CategoryMeals';
+import IngredientMeals from './pages/IngredientMeals';
+import ShoppingList from './pages/ShoppingList';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
               <Route path="/liked" element={<LikedMeals />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/category/:name" element={<CategoryMeals />} />
+              <Route path="/ingredient/:name" element={<IngredientMeals />} />
+              <Route path="/shopping-list" element={<ShoppingList />} />
             </Routes>
           </main>
           <Footer />

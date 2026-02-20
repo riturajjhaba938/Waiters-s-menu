@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { LikedContext } from '../context/LikedContext';
 import { ArrowLeft, Heart, Globe, UtensilsCrossed } from 'lucide-react';
 import './MealDetails.css';
@@ -63,7 +63,7 @@ const MealDetails = () => {
         const ingredient = meal[`strIngredient${i}`];
         const measure = meal[`strMeasure${i}`];
         if (ingredient && ingredient.trim() !== '') {
-            ingredients.push(`${measure} ${ingredient}`);
+            ingredients.push({ name: ingredient, measure: measure });
         }
     }
 
@@ -72,6 +72,16 @@ const MealDetails = () => {
         .split('.')
         .filter(sentence => sentence.trim().length > 0)
         .slice(0, 10); // Display a shortened, manageable list of instructions
+
+    // Extract YouTube ID
+    let youtubeId = null;
+    if (meal.strYoutube) {
+        const urlPattern = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = meal.strYoutube.match(urlPattern);
+        if (match && match[1]) {
+            youtubeId = match[1];
+        }
+    }
 
     return (
         <div className="meal-details fade-in">
@@ -100,18 +110,36 @@ const MealDetails = () => {
                     </div>
 
                     <div className="ingredients-section">
-                        <h3>Key Ingredients</h3>
+                        <h3>Key Ingredients (Click to Explore)</h3>
                         <ul className="ingredients-list">
-                            {ingredients.slice(0, 5).map((ing, idx) => (
-                                <li key={idx}>{ing}</li>
+                            {ingredients.map((ing, idx) => (
+                                <li key={idx}>
+                                    <Link to={`/ingredient/${ing.name}`} className="ingredient-link">
+                                        <strong>{ing.measure}</strong> {ing.name}
+                                    </Link>
+                                </li>
                             ))}
-                            {ingredients.length > 5 && (
-                                <li className="more-ingredients">+ {ingredients.length - 5} more ingredients</li>
-                            )}
                         </ul>
                     </div>
                 </div>
             </div>
+
+            {youtubeId && (
+                <div className="video-section">
+                    <h2>Recipe Video</h2>
+                    <div className="video-container">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src={`https://www.youtube.com/embed/${youtubeId}`}
+                            title="YouTube video player"
+                            frameBorder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
+                    </div>
+                </div>
+            )}
 
             <div className="instructions-section">
                 <h2>Instructions</h2>

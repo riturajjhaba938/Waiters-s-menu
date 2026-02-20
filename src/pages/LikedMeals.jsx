@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { LikedContext } from '../context/LikedContext';
-import { Heart, Info, HeartOff } from 'lucide-react';
+import { Heart, Info, HeartOff, Star } from 'lucide-react';
+import './LikedMeals.css';
 
 const LikedMeals = () => {
-    const { likedMeals, toggleLike, isLiked } = useContext(LikedContext);
+    const { likedMeals, likedMealsData, toggleLike, isLiked, updateRating, updateNotes } = useContext(LikedContext);
     const [meals, setMeals] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -76,33 +77,57 @@ const LikedMeals = () => {
 
             {!loading && !error && meals.length > 0 && (
                 <div className="grid">
-                    {meals.map((meal) => (
-                        <div key={meal.idMeal} className="card">
-                            <img
-                                src={meal.strMealThumb}
-                                alt={meal.strMeal}
-                                className="card-img"
-                                loading="lazy"
-                            />
-                            <div className="card-content">
-                                <span className="card-category">{meal.strCategory}</span>
-                                <h3 className="card-title" title={meal.strMeal}>{meal.strMeal}</h3>
+                    {meals.map((meal) => {
+                        const mealData = likedMealsData.find(m => m.id === meal.idMeal) || { rating: 0, notes: '' };
 
-                                <div className="card-actions">
-                                    <Link to={`/meal/${meal.idMeal}`} className="btn btn-primary">
-                                        <Info size={18} /> View Details
-                                    </Link>
-                                    <button
-                                        onClick={() => toggleLike(meal.idMeal)}
-                                        className={`btn-icon ${isLiked(meal.idMeal) ? 'active' : ''}`}
-                                        aria-label="Remove Like"
-                                    >
-                                        <Heart size={20} fill={isLiked(meal.idMeal) ? 'currentColor' : 'none'} />
-                                    </button>
+                        return (
+                            <div key={meal.idMeal} className="card liked-card">
+                                <img
+                                    src={meal.strMealThumb}
+                                    alt={meal.strMeal}
+                                    className="card-img"
+                                    loading="lazy"
+                                />
+                                <div className="card-content">
+                                    <span className="card-category">{meal.strCategory}</span>
+                                    <h3 className="card-title" title={meal.strMeal}>{meal.strMeal}</h3>
+
+                                    <div className="personalize-section">
+                                        <div className="rating-container">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <Star
+                                                    key={star}
+                                                    size={18}
+                                                    className={`star-icon ${star <= mealData.rating ? 'filled' : ''}`}
+                                                    onClick={() => updateRating(meal.idMeal, star === mealData.rating ? 0 : star)}
+                                                />
+                                            ))}
+                                        </div>
+                                        <textarea
+                                            className="notes-input"
+                                            placeholder="Add personal notes here..."
+                                            value={mealData.notes || ''}
+                                            onChange={(e) => updateNotes(meal.idMeal, e.target.value)}
+                                            rows="2"
+                                        />
+                                    </div>
+
+                                    <div className="card-actions mt-auto">
+                                        <Link to={`/meal/${meal.idMeal}`} className="btn btn-primary">
+                                            <Info size={18} /> View Details
+                                        </Link>
+                                        <button
+                                            onClick={() => toggleLike(meal.idMeal)}
+                                            className={`btn-icon ${isLiked(meal.idMeal) ? 'active' : ''}`}
+                                            aria-label="Remove Like"
+                                        >
+                                            <Heart size={20} fill={isLiked(meal.idMeal) ? 'currentColor' : 'none'} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>

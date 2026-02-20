@@ -1,0 +1,65 @@
+.liked-page {
+    display: block;
+}
+
+.liked-card {
+    height: auto;
+    min-height: 480px;
+}
+
+.personalize-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+}
+
+.rating-container {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.star-icon {
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.star-icon:hover {
+    transform: scale(1.1);
+}
+
+.star-icon.filled {
+    color: #fbbf24;
+    fill: #fbbf24;
+}
+
+.notes-input {
+    width: 100%;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.75rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.9rem;
+    resize: vertical;
+    min-height: 60px;
+    transition: var(--transition);
+}
+
+.notes-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+}
+
+.mt-auto {
+    margin-top: auto;
+}
